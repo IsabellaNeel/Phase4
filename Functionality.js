@@ -41,7 +41,11 @@ class User {
 }
 
 let user1 = new User();
-user1.userName = "Bob";
+if(sessionStorage.getItem("name")){
+    user1.userName = sessionStorage.getItem("name");
+} else {
+    user1.userName = "You"
+}
 let sam = new UserPersona;
 sam.name = "Sam";
 let jane = new UserPersona;
@@ -703,6 +707,11 @@ function removeFoodItem(i, j){ //removes food item from array and screen
 }
 
 function getFoodInfo(i, j){ //gets information about specified food item to display on screen
+    if(user1.foodArr[i][j].owner == "You" && sessionStorage.getItem("name")){
+        user1.foodArr[i][j].owner = sessionStorage.getItem("name");
+    }
+    console.log("user1.foodArr[i][j].name");
+    console.log(user1.foodArr[i][j].name);
     document.getElementById("result").innerHTML = "<h1><img class=\"foodImage\" src=\"" +
     getImage( user1.foodArr[i][j].name) + "\" width=\"200\" class=\"center\"> Name: " +
     user1.foodArr[i][j].name + "<br>Quantity: " + user1.foodArr[i][j].quantity + "<br>Expiration: " +
