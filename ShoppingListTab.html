@@ -52,12 +52,26 @@
             <form class="form-container">
                 <h2 style="padding: 2%; text-align: center">Add Item to Your Shopping List</h2>
                 <label for="foodLabelShopping"><span>Food Label</span></label>
-                <br/>
                 <input type="text" placeholder="Enter Food Label" name="foodLabelShopping" id="foodLabelShopping" style = "width: calc(100% - 24px) !important" onclick = "showOSKeyboard()" required/>
                 <br/>
-                <label for="notesLabelShopping"><span>Notes</span></label>
+                <label for="categoryShop"><span>Category</span></label>
                 <br/>
-                <textarea rows="5" cols="49" name="notesLabelShopping" id="notesLabelShopping" form="form-container" style = "resize: none; font-size: 16px" onclick = "showOSKeyboard()"></textarea>
+                <select id="categoryShop" name="categoryShop" style = "font-size: 16px; padding: 11px; margin-top: 10px; margin-bottom: 10px ">
+                    <option value="Protein">Protein</option>
+                    <option value="Dairy">Dairy</option>
+                    <option value="Vegetable">Vegetable</option>
+                    <option value="Fruit">Fruit</option>
+                    <option value="Carb">Carb</option>
+                    <option value="Drink">Drink</option>
+                    <option value="Meal">Meal</option>
+                    <option value="Spice">Spice</option>
+                    <option value="Oil">Oil</option>
+                    <option value="Other" selected>Other</option>
+                    </select>
+                <br/>
+                <label for="quantityShop"><span>Quantity</span></label>
+                <br/>
+                <input type="number" placeholder="Enter Quantity" name="quantityShop" id="quantityShop" style = "width: calc(100% - 360px) !important" onclick = "showOSKeyboard()"/>
                 <br/>
                 <br/>
                 <button type="button" class="btn" onclick="formatToAddShoppingList(); hideOSKeyboard();">Enter</button>

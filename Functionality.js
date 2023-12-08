@@ -1,7 +1,8 @@
 class ShoppingListItem {
-    constructor(foodName, notes, striked, id){
+    constructor(foodName, category, quantity, striked, id){
         this.foodName = foodName;
-        this.notes = notes;
+        this.category = category;
+        this.quantity = quantity;
         this.striked = striked;
         this.id = id;
     }
@@ -291,9 +292,10 @@ function toggleShoppingForm(){
 
 function formatToAddShoppingList(){
     var nameValue = document.getElementById("foodLabelShopping").value;
-    var notesValue = document.getElementById("notesLabelShopping").value;
+    var categoryShopValue = document.getElementById("categoryShop").value;
+    var quantityShopValue = document.getElementById("quantityShop").value;
     
-    let shoppingListItem = {foodName: nameValue, notes: notesValue, striked: "false", id: ""};
+    let shoppingListItem = {foodName: nameValue, category: categoryShopValue, quantity: quantityShopValue, striked: "false", id: ""};
 
     let str2 = sessionStorage.getItem('shoppingListArr');
     if(str2 == null){
@@ -318,18 +320,13 @@ function displayAllShoppingListItems(){
     for(let i in user1.shoppingListArr){
         results = results + 
         "<tr class = \"cartitem\">" +
-            "<td style = \"width: 85%\">";
+            "<td id = \"foodWidth" + i + "\" + style = \"width: 38%\">";
                 if(user1.shoppingListArr[i].striked == "true"){
-                    results = results + "<h3 style = \"text-decoration: line-through\" id = \"itemLabel" + i + "\">" + user1.shoppingListArr[i].foodName + "</h3>";
+                    results = results + "<h3 style = \"text-decoration: line-through\" id = \"itemLabel" + i + "\">" + user1.shoppingListArr[i].quantity + " "  + user1.shoppingListArr[i].foodName + "</h3>";
                 } else {
-                    results = results + "<h3 style = \"text-decoration: none\" id = \"itemLabel" + i + "\">" + user1.shoppingListArr[i].foodName + "</h3>";
+                    results = results + "<h3 style = \"text-decoration: none\" id = \"itemLabel" + i + "\">" +  user1.shoppingListArr[i].quantity + " "  + user1.shoppingListArr[i].foodName + "</h3>";
                 }
-                results = results + "<p id = \"showNotes"+ i +"\"></p>" +
-                "<p style = \"color: #2e8cca\" id = \"strikeLink" + i + "\" onclick = \"toggleStrikethough(" + i + ")\"></p>" +
-            "</td>" +
-
-            "<td style = \"width: 8%; text-align: center\" onclick = \"toggleExpand(this.firstElementChild," + i +")\">" +
-                "<h3 class = \"expand\">&#8964;</h3>" + 
+                results = results + "<td style = \"width: 55%; color: #2e8cca; margin-right: 0px\" id = \"strikeLink" + i + "\" onclick = \"toggleStrikethough(" + i + ")\">[Mark as purchased and add to kitchen]</td>" +
             "</td>" +
 
             "<td style = \"width: 7%; text-align: center\" onclick = \"deleteItem(this.parentElement," + i + ")\">" +
@@ -354,7 +351,8 @@ function displayAllShoppingListItems(){
 function flushInputsShoppingList(){
     /* new function to clear all of the input fields on the form, in order to account for the new implementation of the form. --andrew */
     document.getElementById('foodLabelShopping').value = '';
-    document.getElementById('notesLabelShopping').value = '';
+    document.getElementById('categoryShop').value = '';
+    document.getElementById('quantityShop').value = '';
 }
 
 function deleteItem(input, index) {
@@ -379,7 +377,7 @@ function deleteItem(input, index) {
         if(user1.shoppingListArr[index].notes == ""){
             document.getElementById("showNotes"+index).innerHTML = "No Notes";
         } else{
-            document.getElementById("showNotes"+index).innerHTML = user1.shoppingListArr[index].notes;
+            document.getElementById("showNotes"+index).innerHTML = "No Notes";
         }
         document.getElementById("strikeLink" + index).innerHTML = mark;
     } else {
@@ -393,6 +391,8 @@ function toggleStrikethough(index){
     if (document.getElementById("itemLabel" + index).style.textDecoration === "none"){
         document.getElementById("itemLabel" + index).style.textDecoration = "line-through"
         document.getElementById("strikeLink" + index).innerHTML = "[Undo]";
+        document.getElementById("strikeLink" + index).style.width = "8%";
+        document.getElementById("foodWidth" + index).style.width = "85%";
         user1.shoppingListArr[index].striked = "true";
         addFromShoppingList(index);
         console.log("Add: user1.shoppingListArr[index].id");
@@ -401,6 +401,8 @@ function toggleStrikethough(index){
         document.getElementById("itemLabel" + index).style.textDecoration = "none"
         document.getElementById("strikeLink" + index).innerHTML = "[Mark as purchased and add to kitchen]";
         user1.shoppingListArr[index].striked = "false";
+        document.getElementById("strikeLink" + index).style.width = "55%";
+        document.getElementById("foodWidth" + index).style.width = "38%";
         console.log("remove: user1.shoppingListArr[index].id");
         console.log(user1.shoppingListArr[index].id);
         removeById(user1.shoppingListArr[index].id);
@@ -411,7 +413,7 @@ function toggleStrikethough(index){
 
 function addFromShoppingList(index){
     let foodItem = {id: user1.idNum++, name: user1.shoppingListArr[index].foodName, 
-        category: "Other", quantity: "", expiration: "", allergens: "", calories: "", 
+        category: user1.shoppingListArr[index].category, quantity: user1.shoppingListArr[index].quantity, expiration: "", allergens: "", calories: "", 
         owner:user1.userName, servingSize: ""};
     
     user1.shoppingListArr[index].id = foodItem.id;
@@ -425,7 +427,7 @@ function addFromShoppingList(index){
         user1.foodArr = JSON.parse(str);
     }
 
-    user1.foodArr[stringToNum("Other")].push(foodItem);
+    user1.foodArr[stringToNum(user1.shoppingListArr[index].category)].push(foodItem);
     user1.foodArr[10].push(foodItem);
 
     let jsonArray = JSON.stringify(user1.foodArr);
@@ -499,36 +501,38 @@ function numToString(num){
 }
 
 function formatToAdd(){ //adds food item to foodArr after food item form has been filled out and entered
-    var nameValue = document.getElementById("foodLabel").value;
-    var categoryValue = document.getElementById("category").value;
-    var quantityValue = document.getElementById("quantity").value;
-    var expirationValue = document.getElementById("expiration").value;
-    var allergensValue = document.getElementById("allergens").value;
-    var caloriesValue = document.getElementById("calories").value;
-    var servingSizeValue = document.getElementById("servingSize").value;
+    if(document.getElementById("foodLabel").value != ""){
+        var nameValue = document.getElementById("foodLabel").value;
+        var categoryValue = document.getElementById("category").value;
+        var quantityValue = document.getElementById("quantity").value;
+        var expirationValue = document.getElementById("expiration").value;
+        var allergensValue = document.getElementById("allergens").value;
+        var caloriesValue = document.getElementById("calories").value;
+        var servingSizeValue = document.getElementById("servingSize").value;
 
-    let foodItem = {id:  user1.idNum++, name: nameValue, category: categoryValue, quantity: quantityValue, 
-        expiration: expirationValue, allergens: allergensValue, calories: caloriesValue, 
-        owner:user1.userName, servingSize: servingSizeValue};
+        let foodItem = {id:  user1.idNum++, name: nameValue, category: categoryValue, quantity: quantityValue, 
+            expiration: expirationValue, allergens: allergensValue, calories: caloriesValue, 
+            owner:user1.userName, servingSize: servingSizeValue};
 
-    let str = sessionStorage.getItem('foodArr');
-    if(str == null){
-        user1.foodArr = [["Protein"], ["Dairy"], ["Veggies"], ["Fruits"], ["Carbs"], ["Drinks"], ["Meals"], ["Spices"], ["Oil"], ["Other"], ["All"]];
-    } else {
-        user1.foodArr = JSON.parse(str);
+        let str = sessionStorage.getItem('foodArr');
+        if(str == null){
+            user1.foodArr = [["Protein"], ["Dairy"], ["Veggies"], ["Fruits"], ["Carbs"], ["Drinks"], ["Meals"], ["Spices"], ["Oil"], ["Other"], ["All"]];
+        } else {
+            user1.foodArr = JSON.parse(str);
+        }
+
+        user1.foodArr[stringToNum(categoryValue)].push(foodItem);
+        user1.foodArr[10].push(foodItem);
+
+        let jsonArray = JSON.stringify(user1.foodArr);
+        sessionStorage.setItem('foodArr', jsonArray);
+        let json = JSON.stringify(user1.idNum);
+        sessionStorage.setItem('idNum', json);
+        
+        myForm.className = "form-popup fpshow";
+        plus.className = "menuicon";
+        displayAllFood();
     }
-
-    user1.foodArr[stringToNum(categoryValue)].push(foodItem);
-    user1.foodArr[10].push(foodItem);
-
-    let jsonArray = JSON.stringify(user1.foodArr);
-    sessionStorage.setItem('foodArr', jsonArray);
-    let json = JSON.stringify(user1.idNum);
-    sessionStorage.setItem('idNum', json);
-    
-    myForm.className = "form-popup fpshow";
-    plus.className = "menuicon";
-    displayAllFood();
 }
 
 function displayAllFood(){ //displays all food items from foodArr in boxes
