@@ -49,7 +49,7 @@
             <form class="form-container">
                 <h2 style="padding: 2%; text-align: center">Add Food Entry to Your Kitchen Inventory</h2>
                 <table>
-                    <tr>
+                    <tr style="width:400px; padding: 10px">
                         <td style = "width: 28%">
                             <label for="foodLabel"><span style="color:red">*</span>Food Label<br><span style="color:red">(required)</span></label>
                         </td>
@@ -77,10 +77,10 @@
                         </td>
                     </tr>
                     <tr>
-                        <td style = "width: 28%">
+                        <td >
                             <label for="quantity"><span>Quantity</span></label>
                         </td>
-                        <td style = "width: 72%">
+                        <td style="width: 10px">
                             <input type="number" placeholder="Enter Quantity" name="quantity" id="quantity" onclick = "showOSKeyboard()"/>
                         </td>
                     </tr>
@@ -89,7 +89,7 @@
                             <label for="expiration"><span>Expiration Date</span></label>    
                         </td>
                         <td style = "width: 72%">
-                            <input type="text" placeholder="Enter Expiration Date" name="expiration" id="expiration" onclick = "showOSKeyboard()"/>
+                            <input type="date" placeholder="Enter Expiration Date" name="expiration" id="expiration" onclick = "showOSKeyboard()"/>
                         </td>
                     </tr>
                     <tr>
@@ -97,7 +97,17 @@
                             <label for="allergens"><span>Allergens</span></label>
                         </td>
                         <td style = "width: 72%">
-                            <input type="text" placeholder="Enter Allergens" name="allergens" id="allergens" onclick = "showOSKeyboard()"/>
+                            <select id="allergens" name="allergens" style = "font-size: 16px; padding: 12px;">
+                                <option value="Milk">Milk</option>
+                                <option value="Eggs">Eggs</option>
+                                <option value="Fish">Fish</option>
+                                <option value="Crustacean Shellfish">Crustacean Shellfish</option>
+                                <option value="Tree Nuts">Tree Nuts</option>
+                                <option value="Peanuts">Peanuts</option>
+                                <option value="Wheat">Wheat</option>
+                                <option value="Soybeans">Soybeans</option>
+                                <option value="Other" selected>Other</option>
+                              </select>
                         </td>
                     </tr>
                     <tr>
@@ -117,8 +127,8 @@
                         </td>
                     </tr>
                 </table>
-                <button type="button" class="btn" onclick="formatToAdd(); hideOSKeyboard();">Enter</button>
-                <button type="button" class="btn cancel" onclick="displayAllFood(); hideOSKeyboard();">Close</button>     
+                <button type="button" style = "width: 49%" class="btn" onclick="formatToAdd(); hideOSKeyboard();">Enter</button>
+                <button type="button" style = "width: 49%" class="btn cancel" onclick="displayAllFood(); hideOSKeyboard();">Close</button>     
             </form>
             <!--<button style="bottom:11%; right:2%" class="open-button" onclick="openForm()"><p>+</p></button>-->
         </div>

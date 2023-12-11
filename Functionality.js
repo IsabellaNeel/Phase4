@@ -680,7 +680,7 @@ function flushInputs(){ //new function to clear all of the input fields on the f
     document.getElementById('category').value = 'Other';
     document.getElementById('quantity').value = '';
     document.getElementById('expiration').value = '';
-    document.getElementById('allergens').value = '';
+    document.getElementById('allergens').value = 'Other';
     document.getElementById('calories').value = '';
     document.getElementById('servingSize').value = '';
 }
